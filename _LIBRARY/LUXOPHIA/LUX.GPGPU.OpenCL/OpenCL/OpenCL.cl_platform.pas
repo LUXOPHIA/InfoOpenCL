@@ -109,7 +109,7 @@ uses LUX.Code.C;
             #define CL_EXT_SUFFIX__VERSION_2_0_DEPRECATED __attribute__((deprecated))
             {$DEFINE CL_EXT_PREFIX__VERSION_2_0_DEPRECATED }
         {$ENDIF}
-    #elif _WIN32
+    {$ELSEIF _WIN32 }
         {$IFDEF CL_USE_DEPRECATED_OPENCL_1_0_APIS }
             {$DEFINE CL_EXT_SUFFIX__VERSION_1_0_DEPRECATED }
             #define CL_EXT_PREFIX__VERSION_1_0_DEPRECATED    
