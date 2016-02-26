@@ -1,4 +1,4 @@
-program OpenCL;
+program InfoOpenCL;
 
 uses
   System.StartUpCopy,
