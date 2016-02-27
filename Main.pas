@@ -45,7 +45,7 @@ begin
 
           T := P_char( A_ );
 
-          for S in T.Split( [' '] ) do Memo1.Lines.Add( 'Å@- ' + S );
+          for S in T.Split( [ ' ' ] ) do Memo1.Lines.Add( 'Å@- ' + S );
      end;
 end;
 
