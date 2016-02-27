@@ -17,8 +17,6 @@ type
     { private 宣言 }
   public
     { public 宣言 }
-    procedure ShowLine( const T_:String; const A_:TArray<T_char> );
-    procedure ShowList( const T_:String; const A_:TArray<T_char> );
   end;
 
 var
@@ -28,54 +26,43 @@ implementation //###############################################################
 
 {$R *.fmx}
 
-//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
-
-procedure TForm1.ShowLine( const T_:String; const A_:TArray<T_char> );
-begin
-     if Assigned( A_ ) then Memo1.Lines.Add( '・' + T_ + ': ' + P_char( A_ ) );
-end;
-
-procedure TForm1.ShowList( const T_:String; const A_:TArray<T_char> );
-var
-   T, S :String;
-begin
-     if Assigned( A_ ) then
-     begin
-          Memo1.Lines.Add( '・' + T_ + ':' );
-
-          T := P_char( A_ );
-
-          for S in T.Split( [ ' ' ] ) do Memo1.Lines.Add( '　- ' + S );
-     end;
-end;
-
-//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
-
 procedure TForm1.FormCreate(Sender: TObject);
 var
-   P :T_cl_platform_id;
-   D :T_cl_device_id;
+   Ps :TArray<TCLPlatform>;
+   P  :TCLPlatform;
+   E  :String;
+   D  :TCLDevice;
 begin
-     for P in GetPlatformIDs do
+     if GetPlatforms( Ps, CL_DEVICE_TYPE_ALL ) <> CL_SUCCESS then Exit;
+
+     for P in Ps do
      begin
-          Memo1.Lines.Add( '▼ PLATFORM: ' + Cardinal( P ).ToString );
-
-          ShowLine( 'NAME      ', GetPlatformInfo( P, CL_PLATFORM_NAME       ) );
-          ShowLine( 'VENDOR    ', GetPlatformInfo( P, CL_PLATFORM_VENDOR     ) );
-          ShowLine( 'VERSION   ', GetPlatformInfo( P, CL_PLATFORM_VERSION    ) );
-          ShowLine( 'PROFILE   ', GetPlatformInfo( P, CL_PLATFORM_PROFILE    ) );
-          ShowList( 'EXTENSIONS', GetPlatformInfo( P, CL_PLATFORM_EXTENSIONS ) );
-
-          for D in GetDeviceIDs( P, CL_DEVICE_TYPE_ALL ) do
+          with P do
           begin
-               Memo1.Lines.Add( '▽ DEVICE: ' + Cardinal( D ).ToString );
+               Memo1.Lines.Add( '▼ PLATFORM: ' + Cardinal( ID ).ToString );
+               Memo1.Lines.Add( '・NAME      :' + Name                    );
+               Memo1.Lines.Add( '・VENDOR    :' + Vendor                  );
+               Memo1.Lines.Add( '・VERSION   :' + Version                 );
+               Memo1.Lines.Add( '・PROFILE   :' + Profile                 );
+               Memo1.Lines.Add( '・EXTENSIONS:'                           );
+               for E in Extensions do
+               Memo1.Lines.Add( '　- '          + E                       );
 
-               ShowLine( 'NAME      ', GetDeviceInfo( D, CL_DEVICE_NAME       ) );
-               ShowLine( 'VENDOR    ', GetDeviceInfo( D, CL_DEVICE_VENDOR     ) );
-               ShowLine( 'VERSION   ', GetDeviceInfo( D, CL_DEVICE_VERSION    ) );
-               ShowLine( 'PROFILE   ', GetDeviceInfo( D, CL_DEVICE_PROFILE    ) );
-               ShowLine( 'DRIVER    ', GetDeviceInfo( D, CL_DRIVER_VERSION    ) );
-               ShowList( 'EXTENSIONS', GetDeviceInfo( D, CL_DEVICE_EXTENSIONS ) );
+               for D in Devices do
+               begin
+                    with D do
+                    begin
+                         Memo1.Lines.Add( '▽ DEVICE: ' + Cardinal( ID ).ToString );
+                         Memo1.Lines.Add( '・NAME      :' + Name                  );
+                         Memo1.Lines.Add( '・VENDOR    :' + Vendor                );
+                         Memo1.Lines.Add( '・VERSION   :' + Version               );
+                         Memo1.Lines.Add( '・PROFILE   :' + Profile               );
+                         Memo1.Lines.Add( '・DRIVER    :' + Driver                );
+                         Memo1.Lines.Add( '・EXTENSIONS:'                         );
+                         for E in Extensions do
+                         Memo1.Lines.Add( '　- '          + E                     );
+                    end;
+               end;
           end;
 
           Memo1.Lines.Add( '' );
